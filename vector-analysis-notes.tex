@@ -1052,29 +1052,29 @@ Note that exact $\Rightarrow$ closed, but closed $\nRightarrow$ exact.
 \section{Contraction Operator}
 
 \begin{definition}
-Let $M$ be an $n$-dimensional manifold. With every vector field $v\in\mathfrak X(M)$ we can associate a linear map $i_v$, a contraction. This $i_v$ maps a differential $k$-form to a $(k-1)$-form, so
+Let $M$ be an $n$-dimensional manifold. With every vector field $v\in\mathfrak X(M)$ we can associate a linear map $\iota_v$, a contraction. This $\iota_v$ maps a differential $k$-form to a $(k-1)$-form, so
 \[
-i_v:\Omega^k(M)\to\Omega^{k-1}(M):\omega\mapsto i_v\omega,
+\iota_v:\Omega^k(M)\to\Omega^{k-1}(M):\omega\mapsto \iota_v\omega,
 \]
 defined by
 \[
-(i_v\omega)(v_1,\dots,v_{k-1}) = \omega(v,v_1,\dots,v_{k-1})
+(\iota_v\omega)(v_1,\dots,v_{k-1}) = \omega(v,v_1,\dots,v_{k-1})
 \]
 for all $v_1,v_2,\dots,v_{k-1}\in\mathfrak X(M)$.
 \end{definition}
 
-If $k=0$, then the target would be $\Omega^{-1}(M)$, so we set $i_vf=0$.
+If $k=0$, then the target would be $\Omega^{-1}(M)$, so we set $\iota_vf=0$.
 
 Properties:
 
 Antisymmetry:
 \[
-i_v\circ i_w = - i_w\circ i_v.
+\iota_v\circ \iota_w = - \iota_w\circ \iota_v.
 \]
 
 Product rule:
 \[
-i_v(\mu\wedge\omega)=(i_v\mu)\wedge\omega + (-1)^\ell\mu\wedge(i_v\omega),
+\iota_v(\mu\wedge\omega)=(\iota_v\mu)\wedge\omega + (-1)^\ell\mu\wedge(\iota_v\omega),
 \]
 where $\mu\in\Omega^\ell(M)$.
 
@@ -1083,11 +1083,11 @@ where $\mu\in\Omega^\ell(M)$.
 \begin{definition}
 Let $f:M\to N$ be smooth. The push-forward (differential) of $f$ at $p\in M$ is
 \[
-f_{*,p}:T_pM\to T_{f(p)}N,
+f_*: \mathfrak X(M)\to \mathfrak X(N): v \mapsto f_*v,
 \]
-defined for $v_p\in T_pM$ and $g\in C^\infty(N)$ by
+defined for $v\in \mathfrak X(M)$ and $g\in C^\infty(N)$ by
 \[
-(f_{*,p}v_p)(g)\equiv v_p(g\circ f).
+(f_{*}v)(g)\equiv v(g\circ f).
 \]
 \end{definition}
 
@@ -1098,9 +1098,9 @@ Let $f:M\to N$ be smooth. The pullback map is the linear map
 \[
 f^*:\Omega^k(N)\to\Omega^k(M):\omega\mapsto f^*\omega,
 \]
-defined for $\omega\in\Omega^k(N)$ and $v_1,\dots,v_k\in T_pM$ by
+defined for $\omega\in\Omega^k(N)$ and $v_1,\dots,v_k\in \mathfrak X(M)$ by
 \[
-(f^*\omega)_p(v_1,\dots,v_k)\equiv \omega_{f(p)}(f_{*,p}v_1,\dots,f_{*,p}v_k).
+(f^*\omega)(v_1,\dots,v_k)\equiv \omega(f_{*}v_1,\dots,f_{*}v_k).
 \]
 \end{definition}
 
