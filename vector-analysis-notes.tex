@@ -1,0 +1,1401 @@
+\documentclass[11pt]{report}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,amsthm}
+\usepackage{esint}
+\usepackage[most]{tcolorbox}
+\usepackage{mathrsfs}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\Huge}
+  {\chaptername\ \thechapter}
+  {0.5em}
+  {}
+
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\setlist[enumerate]{itemsep=0.25em, topsep=0.25em}
+\setcounter{tocdepth}{2}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{example}[definition]{Example}
+\newtheorem{note}[definition]{Note}
+\newtheorem{intuition}[definition]{Intuition}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\T}{\hat T}
+\newcommand{\ip}[2]{\left(#1,#2\right)}
+\newcommand{\grad}{\nabla}
+\newcommand{\divergence}{\operatorname{div}}
+\newcommand{\curl}{\operatorname{curl}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\ut}{\mathbf{t}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2.8cm}
+
+    {\Huge\bfseries Vector Analysis and Geometry\par}
+    \vspace{0.25cm}
+    {\huge 2MBC40\par}
+    
+    \vspace{0.9cm}
+
+
+    \vspace{2.2cm}
+
+
+
+    \vfill
+
+    \centering
+    The source code for these notes is publicly available in my github.\\ Contributions and corrections are always welcome.
+
+    \vspace{0.5em}
+    \texttt{https://github.com/Luiser13/vector-analysis-summary}\\
+    
+
+    \vspace{0.5em}
+    {\normalsize Luis Rodriguez Pacheco\par}
+    {\normalsize Eindhoven University of Technology\par}
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\chapter*{Useful Tools Not Covered in the Course}
+
+\begin{center}
+
+\begin{minipage}{0.48\textwidth}
+\textbf{Coordinate transformations}
+
+\begin{tcolorbox}[width=\textwidth, colframe=black, colback=white]
+\textbf{Polar}
+\begin{gather*}
+x = r\cos\theta,\quad y = r\sin\theta \\
+r\in[0,\infty),\ \theta\in[0,2\pi] \\
+\det(D\Phi_{\mathrm{pol}})=r,\quad dA=r\,dr\,d\theta
+\end{gather*}
+\end{tcolorbox}
+
+\vspace{0.3em}
+
+\begin{tcolorbox}[width=\textwidth, colframe=black, colback=white]
+\textbf{Elliptic Polar}
+\begin{gather*}
+x = x_0 + ar\cos\theta,\quad y = y_0 + br\sin\theta \\
+r\in[0,1],\ \theta\in[0,2\pi] \\
+\det(D\Phi_{\mathrm{ell}})=abr,\quad dA=abr\,dr\,d\theta
+\end{gather*}
+\end{tcolorbox}
+
+\vspace{0.3em}
+
+\begin{tcolorbox}[width=\textwidth, colframe=black, colback=white]
+\textbf{Cylindrical}
+\begin{gather*}
+x = r\cos\theta,\quad y = r\sin\theta,\quad z=z \\
+r\in[0,\infty),\ \theta\in[0,2\pi],\ z\in\R \\
+\det(D\Phi_{\mathrm{cyl}})=r,\quad dV=r\,dr\,d\theta\,dz
+\end{gather*}
+\end{tcolorbox}
+
+\vspace{0.3em}
+
+\begin{tcolorbox}[width=\textwidth, colframe=black, colback=white]
+\textbf{Spherical}
+\begin{gather*}
+x = \rho\sin\phi\cos\theta \\
+y = \rho\sin\phi\sin\theta \\
+z = \rho\cos\phi \\
+\rho\in[0,\infty),\ \theta\in[0,2\pi],\ \phi\in[0,\pi] \\
+\det(D\Phi_{\mathrm{sph}})=\rho^2\sin\phi,\quad\\
+dV=\rho^2\sin\phi\,d\rho\,d\phi\,d\theta
+\end{gather*}
+\end{tcolorbox}
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\textbf{Weierstrass substitution}
+
+\begin{tcolorbox}[colframe=black, colback=white]
+Useful for turning trigonometric integrals into rational integrals.
+
+\begin{gather*}
+t=\tan\left(\frac{x}{2}\right),\qquad
+dx=\frac{2}{1+t^2}\,dt \\
+\sin x=\frac{2t}{1+t^2},\qquad
+\cos x=\frac{1-t^2}{1+t^2}
+\end{gather*}
+
+\textbf{When to use:}
+\begin{itemize}[leftmargin=1.5em]
+    \item Integrands involving only \(\sin x\), \(\cos x\), and rational operations.
+    \item Especially useful when standard identities do not simplify the integral enough.
+\end{itemize}
+
+\textbf{Important:}
+For a full period \(x\in[0,2\pi]\), split at \(x=\pi\), since
+\[
+\tan\left(\frac{\pi}{2}\right) \text{ is undefined.}
+\]
+
+\textbf{Procedure:}
+\begin{enumerate}[leftmargin=1.5em]
+    \item Set \(t=\tan(x/2)\).
+    \item Replace \(\sin x,\cos x,dx\) using the formulas above.
+    \item Simplify to a rational function in \(t\).
+    \item Integrate using algebraic methods: partial fractions, symmetry, completing the square.
+\end{enumerate}
+\end{tcolorbox}
+
+\end{minipage}
+
+\end{center}
+
+\part{Classical Vector Analysis}
+
+\chapter{Euclidean Space and Fields}
+
+\section{Euclidean Space \texorpdfstring{$\mathbb{R}^3$}{R3}}
+
+\begin{definition}[Inner Product]
+\[
+\ip{\overrightarrow{OX}}{\overrightarrow{OY}}
+=
+|\overrightarrow{OX}|\,|\overrightarrow{OY}|
+\cos\bigl(\angle(\overrightarrow{OX},\overrightarrow{OY})\bigr).
+\]
+\end{definition}
+
+\begin{definition}[Cross Product]
+\[
+\overrightarrow{OX}\times \overrightarrow{OY}=\overrightarrow{OZ}
+\]
+such that:
+\begin{enumerate}
+    \item $\overrightarrow{OX}\perp \overrightarrow{OZ}$ and $\overrightarrow{OY}\perp \overrightarrow{OZ}$, that is,
+    \[
+    \ip{\overrightarrow{OX}}{\overrightarrow{OZ}} = \ip{\overrightarrow{OY}}{\overrightarrow{OZ}} = 0.
+    \]
+    \item
+    \[
+    |\overrightarrow{OZ}| = |\overrightarrow{OX}|\,|\overrightarrow{OY}|\sin(\alpha),
+    \]
+    so $|\overrightarrow{OZ}|$ is the area of the parallelogram spanned by $\overrightarrow{OX}$ and $\overrightarrow{OY}$.
+    \item If $|\overrightarrow{OZ}|\neq 0$, then the ordered set $(OX,OY,OZ)$ is right-handed.
+\end{enumerate}
+\end{definition}
+
+\section{Scalar Fields}
+
+\begin{definition}
+A scalar field $\varphi$ defined on $D\subset \R^3$ is a map
+\[
+\varphi:D\subset \R^3\to \R.
+\]
+\end{definition}
+
+\section{Vector Fields}
+
+A vector field $F$ defined on $D\subset \R^3$ associates to each point $P\in D$ a vector $F(P)$.
+
+With basis $\{e_1(P),e_2(P),e_3(P)\}$, the field represents the vector $F$ at $P$ as
+\[
+F(P)=F_1(P)e_1(P)+F_2(P)e_2(P)+F_3(P)e_3(P).
+\]
+
+In $\R^3$, a vector field is a map $F:\R^3\to \R^3$ such that for each point $(x,y,z)\in \R^3$,
+\[
+F(x,y,z)=\bigl(F_1(x,y,z),F_2(x,y,z),F_3(x,y,z)\bigr)\in \R^3.
+\]
+
+\section{Field Lines}
+
+\begin{definition}
+Let $F$ be a vector field on $D$. The field lines of $F$ are smooth curves $K$ such that for every $p\in K$, the vector $F(p)$ is tangent to $K$.
+\end{definition}
+
+The parametrized curve
+\[
+r(t)=x(t)i+y(t)j+z(t)k
+\]
+is a field line for the vector field $F$ if
+\[
+\dot r(t)=\frac{dr(t)}{dt}=\lambda(t)\,F(r(t)),
+\qquad \lambda(t)>0.
+\]
+
+In polar coordinates,
+\[
+F(r,\theta)=F_r(r,\theta)\,\hat r + F_\theta(r,\theta)\,\hat\theta,
+\]
+with field line given by the system
+\[
+\frac{dr(t)}{dt}=\lambda(t)\,F_r\bigl(r(t),\theta(t)\bigr)
+\]
+and
+\[
+r(t)\frac{d\theta(t)}{dt}=\lambda(t)\,F_\theta\bigl(r(t),\theta(t)\bigr).
+\]
+
+\section{Potentials and Conservative Vector Fields}
+
+If
+\[
+F(x,y,z)=\grad\varphi(x,y,z)\equiv \left(\frac{\partial\varphi}{\partial x},\frac{\partial\varphi}{\partial y},\frac{\partial\varphi}{\partial z}\right)
+\]
+on a domain $D$, then $F$ is conservative on $D$. Also, the scalar field $\varphi$ is the potential of $F$ on $D$.
+
+\chapter{Curves, Line Integrals, and Surfaces}
+
+\section{Curves and Arc Length}
+
+\begin{definition}
+A curve $C$ from $a$ to $b$ is the set of points traced out by a smooth path $r:[\alpha,\beta]\to \R^n$ such that:
+\begin{enumerate}
+    \item $r\in C^{k}$,
+    \item $r(\alpha)=a$ and $r(\beta)=b$,
+    \item $r$ is a bijection,
+    \item $r'(t)\neq 0$ for all $t\in(\alpha,\beta)$.
+\end{enumerate}
+Then $r$ is a parametrization of the curve $C$.
+\end{definition}
+
+\begin{remark}
+$k$ is generally $\infty$.
+\end{remark}
+
+\begin{definition}[Piecewise Smoothness]
+A piecewise smooth curve is a path made of a finite number of smooth segments.
+\end{definition}
+
+\begin{note}
+A closed curve is a curve with parametrization $r:[a,b]\to\R^n$ such that $r(a)=r(b)$, so it is not injective on the whole interval.
+\end{note}
+
+Let $P$ be a partition of $[a,b]$ and let $r(t)$ be a parametrization. We take
+\[
+P:\ a=t_0<t_1<\dots<t_N=b.
+\]
+Then
+\[
+L_P=\sum_{k=0}^{N-1}|r(t_{k+1})-r(t_k)|,
+\]
+and the arc length of a smooth curve $C$ is given by
+\[
+L(C)=\sup\{L_P\mid P \text{ is a partition of } [a,b]\}=\lim_{|P|\to 0}L_P.
+\]
+
+\begin{theorem}
+Let $C$ be a smooth curve with smooth parametrization
+\[
+r(t)=\bigl(r_1(t),\dots,r_n(t)\bigr),\qquad t\in[a,b].
+\]
+Then
+\[
+L(C)=\int_a^b \sqrt{r_1'(t)^2+r_2'(t)^2+\cdots+r_n'(t)^2}\,dt
+=\int_a^b |r'(t)|\,dt.
+\]
+\end{theorem}
+
+Let $r:[a,b]\to \R^n$ be a smooth parametrization of $C$ and let
+\[
+a=t_0<\dots<t_N=b
+\]
+be a partition. Approximating $C$ by segments yields
+\[
+\sum_{i=0}^{N-1} f(r(t_i))\,|r(t_{i+1})-r(t_i)|.
+\]
+By the Mean Value Theorem,
+\[
+|r(t_{i+1})-r(t_i)|=|r'(\tau_i)|(t_{i+1}-t_i),
+\qquad \tau_i\in(t_i,t_{i+1}).
+\]
+Hence the sum becomes
+\[
+\sum f(r(t_i))|r'(\tau_i)|\,\Delta t_i,
+\]
+so
+\[
+\lim_{\Delta t_i\to 0}\sum f(r(t_i))|r'(\tau_i)|\,\Delta t_i
+\]
+is a Riemann sum that converges to
+\[
+\int_a^b f(r(t))|r'(t)|\,dt.
+\]
+
+\begin{theorem}
+The line integral along the curve $C$ is
+\[
+\int_C f\,ds
+=\int_a^b f(r(t))|r'(t)|\,dt.
+\]
+\end{theorem}
+
+\section{Work, Circulation, and Path Independence}
+
+\subsection{Line Integral of a Vector Field (Work)}
+
+Let $C$ be a piecewise smooth curve, let $F$ be a continuous vector field, and let
+\[
+\ut:=\frac{r'(t)}{|r'(t)|}
+\]
+be the unit tangent vector, where $r(t)$ is a parametrization of $C$. Then $\ip{F}{\ut}$ exists and
+\[
+\int_C \ip{F}{\ut}\,ds
+\]
+is the work done by $F$ along $C$.
+
+\begin{note}
+Since $ds=|r'(t)|dt$ and $\ut=\dfrac{r'(t)}{|r'(t)|}$, then
+\[
+\int_C \ip{F}{\ut}\,ds = \int_a^b \ip{F(r(t))}{r'(t)}\,dt,
+\]
+where $r(a)$ and $r(b)$ are the endpoints of $C$.
+\end{note}
+
+\begin{definition}
+If $r(a)=r(b)$, then $C$ is a closed curve. If intersections may be present, then we have the cyclic integral
+\[
+\oint_C f\,ds = \oint_C F\cdot dr,
+\]
+the circulation of $F$ around $C$.
+\end{definition}
+
+\subsection{Path Independence}
+
+In a conservative vector field, the work done is independent of path.
+
+\begin{theorem}
+Let $F$ be conservative with potential $\varphi$. Then
+\[
+\int_C \ip{F}{\ut}\,ds
+=\int_C \ip{\grad\varphi}{\ut}\,ds
+=\int_a^b \ip{\grad\varphi(r(t))}{r'(t)}\,dt
+=\varphi(r(b))-\varphi(r(a)).
+\]
+\end{theorem}
+
+\begin{note}
+Then
+\[
+\oint_C \ip{F}{\ut}\,ds = \varphi(r(b))-\varphi(r(a))=0.
+\]
+\end{note}
+
+\section{Surface Integrals}
+
+\begin{note}
+$\dfrac{\partial x}{\partial u}$ and $\dfrac{\partial x}{\partial v}$ span the tangent plane.
+\end{note}
+
+\begin{definition}
+A surface $S\subset \R^3$ is called smooth if there exist $G\subset \R^2$ and a map $x:G\to \R^3$, continuously differentiable and bijective, such that
+\[
+\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}\neq 0
+\qquad \forall (u,v)\in G,
+\]
+so $S=x(G)$.
+\end{definition}
+
+\begin{theorem}
+Let $f$ be a continuous scalar field. Then
+\[
+\iint_S f\,d\sigma = \iint_G f\bigl(x(u,v)\bigr)\left|\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}\right|\,du\,dv.
+\]
+\end{theorem}
+
+\begin{intuition}
+$d\sigma$ is the surface-area element on $S$. When we change variables to the flat domain $G$, we still want to integrate with respect to the surface area of $S$. Therefore the values of $f$ must be taken at points on the surface, hence $f(x(u,v))$, and
+\[
+\left|\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}\right|
+\]
+accounts for how area in $G$ scales to surface area on $S$.
+\end{intuition}
+
+\section{Orientation}
+
+The unit normal $n(P)$ at the point $P=x(u_p,v_p)$ is
+\[
+n(P):=\pm \frac{\dfrac{\partial x}{\partial u}\times \dfrac{\partial x}{\partial v}}{\left|\dfrac{\partial x}{\partial u}\times \dfrac{\partial x}{\partial v}\right|}(u_p,v_p).
+\]
+
+The sign is determined by checking whether $n$ and
+\[
+\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}
+\]
+point in the same direction:
+\[
+\ip{n}{\dfrac{\partial x}{\partial u}\times \dfrac{\partial x}{\partial v}}>0
+\iff \text{positive orientation},
+\]
+and
+\[
+\ip{n}{\dfrac{\partial x}{\partial u}\times \dfrac{\partial x}{\partial v}}<0
+\iff \text{negative orientation}.
+\]
+
+\section{Flux}
+
+\begin{definition}
+The flux of $F$ through $S$ is
+\[
+\iint_S \ip{F}{n}\,d\sigma.
+\]
+\end{definition}
+
+It follows that
+\[
+\iint_S \ip{F}{n}\,d\sigma
+=\pm \iint_G \left(F\bigl(x(u,v)\bigr),\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}\right)\,du\,dv.
+\]
+
+\chapter{Differential Operators and Integral Theorems}
+
+\section{Gradient, Divergence, and Curl}
+
+Gradient:
+\[
+\grad\varphi = \frac{\partial\varphi}{\partial x}i+\frac{\partial\varphi}{\partial y}j+\frac{\partial\varphi}{\partial z}k.
+\]
+
+Jacobian:
+\[
+DF=
+\begin{pmatrix}
+\dfrac{\partial F_1}{\partial x_1} & \cdots & \dfrac{\partial F_1}{\partial x_n}\\[0.4em]
+\vdots & & \vdots\\[0.4em]
+\dfrac{\partial F_n}{\partial x_1} & \cdots & \dfrac{\partial F_n}{\partial x_n}
+\end{pmatrix}.
+\]
+
+Divergence:
+\[
+\divergence F = \operatorname{trace}(DF).
+\]
+
+If $\divergence F=0$, then $F$ is solenoidal.
+
+Curl:
+\[
+\curl F = \left(\frac{\partial F_3}{\partial y}-\frac{\partial F_2}{\partial z}\right)i
++ \left(\frac{\partial F_1}{\partial z}-\frac{\partial F_3}{\partial x}\right)j
++ \left(\frac{\partial F_2}{\partial x}-\frac{\partial F_1}{\partial y}\right)k.
+\]
+Note that $\curl F=\grad\times F$.
+
+\begin{theorem}
+If a vector field has $\curl F=0$, it is irrotational.
+\end{theorem}
+
+\section{Laplacian Operator of a Scalar Field}
+
+\[
+\Delta:=\grad \cdot \grad,
+\qquad
+\Delta\varphi=\divergence(\grad\varphi).
+\]
+
+The scalar field $\varphi$ is harmonic on $D$ if $\Delta\varphi=0$.
+\newpage
+\section{Identities}
+
+\[
+\grad(\varphi\psi)=\varphi\grad\psi+\psi\grad\varphi
+\qquad
+\grad\times(\grad\varphi)=0
+\]
+\[
+\divergence(\varphi F)=\varphi\,\divergence F+(\grad\varphi)\cdot F
+\qquad
+\divergence(\curl F)=0
+\]
+\[
+\grad\times(\varphi F)=\varphi(\grad\times F)+\grad\varphi\times F
+\]
+\[
+\divergence(F\times G)=\ip{G}{\grad\times F}-\ip{F}{\grad\times G}
+\qquad \text{with } (F\cdot\grad)G:=DG[F]
+\]
+\[
+\grad\times(\grad\times F)=\grad(\grad\cdot F)-(\grad\cdot\grad)F
+\]
+\[
+\grad\times(F\times G)=F(\grad\cdot G)-G(\grad\cdot F)+(G\cdot\grad)F-(F\cdot\grad)G
+\]
+\[
+\grad(F\cdot G)=F\times(\grad\times G)+G\times(\grad\times F)+(G\cdot\grad)F+(F\cdot\grad)G
+\]
+
+\section{Integral Theorems}
+
+Recall that
+\[
+\ut=\frac{r'(t)}{|r'(t)|}
+\qquad \text{and} \qquad
+ds=|r'(t)|\,dt.
+\]
+
+\subsection{Gauss' Theorem (Divergence Theorem)}
+
+Let $R\subset \R^3$ be a region with piecewise smooth boundary $\partial R$, and let $n$ be the outward unit normal. Let $F$ and $\varphi$ be continuously differentiable on a domain containing $R$. Then
+\[
+\iiint_R \grad\varphi\,dV = \oiint_{\partial R} \varphi n\,d\sigma,
+\]
+which is the vector form.
+
+Also,
+\[
+\iiint_R \divergence(F)\,dV = \oiint_{\partial R} \ip{F}{n}\,d\sigma.
+\]
+
+\subsection{Stokes' Theorem}
+
+For $\varphi,F\in C^1(D)$, it holds that
+\[
+\iint_S n\times \grad\varphi\,d\sigma = \oint_{\partial S} \varphi \ut\,ds
+\]
+and
+\[
+\iint_S \ip{\curl F}{n}\,d\sigma = \oint_{\partial S} \ip{F}{\ut}\,ds.
+\]
+
+\subsection{Green's Theorem}
+
+This is a special case of Stokes' theorem for $n=(0,0,1)$.
+
+Let $D\subset \R^2$ be open and connected, and let $R\subset D$ be a domain with piecewise smooth positively oriented boundary $\partial R$. Let $F:D\to \R^2$. Then
+\[
+\iint_R\left(\frac{\partial F_2}{\partial x}-\frac{\partial F_1}{\partial y}\right)dA
+= \oint_{\partial R} F_1(x,y)\,dx + F_2(x,y)\,dy
+= \oint_{\partial R}\ip{F}{\ut}\,ds.
+\]
+
+\section{Vector Potential}
+
+A vector field $F$ has a vector potential if
+\[
+F=\curl G.
+\]
+
+A continuous vector field $F$ is source free if
+\[
+\oiint_S \ip{F}{n}\,d\sigma=0,
+\]
+so there is zero flux for closed $S$ in $D$.
+
+If $F$ is solenoidal, that is, if $\divergence(F)=0$, then $F$ is source free.
+
+\begin{theorem}[Helmholtz Decomposition]
+For any $F:\R^3\to \R^3$ of class $C^2$, we can decompose it into
+\[
+-\grad\phi+\grad\times A,
+\]
+that is, an irrotational part plus a solenoidal part.
+\end{theorem}
+
+\begin{note}
+If $\divergence F=0$ then
+\[
+G:=\int_0^1 t(F(tx)\times x)\,dt
+\]
+is a vector potential.
+\end{note}
+
+To fulfill hypothesis $\mathcal{H}$, a subset $D\subset \R^3$ needs:
+\begin{itemize}
+    \item For any closed surface $S\subset D$, the domain enclosed by $S$ is completely contained in $D$.
+    \item $D$ is non-periphractic, so there are no holes in $D$.
+\end{itemize}
+
+\part{Modern Vector Analysis}
+
+\chapter{Manifolds}
+
+\section{Topological Manifolds}
+
+A topological manifold is a space $M$ such that for every $p\in M$, there exists an open neighborhood $U\subset M$ containing $p$ and a homeomorphism
+\[
+\varphi:U\to V\subset \R^n,
+\]
+where $V$ is open.
+
+A space that globally is weird but locally Euclidean.
+
+The pair $(U,\varphi)$ is a chart, and it is centered if there exists $p\in U$ such that $\varphi(p)=0$.
+
+\section{Smooth Atlases}
+
+This is a collection
+\[
+\mathcal A=\{(U_\alpha,\varphi_\alpha)\}
+\]
+with $\bigcup_\alpha U_\alpha=M$, where $M$ is an $n$-dimensional manifold. Here, any two charts in $\mathcal A$ are smoothly compatible.
+
+Two charts are smoothly compatible if $U_\alpha\cap U_\beta=\varnothing$ or if
+\[
+\varphi_\beta\circ \varphi_\alpha^{-1}:\ \varphi_\alpha(U_\alpha\cap U_\beta)\to \varphi_\beta(U_\alpha\cap U_\beta)
+\]
+and
+\[
+\varphi_\alpha\circ \varphi_\beta^{-1}:\ \varphi_\beta(U_\alpha\cap U_\beta)\to \varphi_\alpha(U_\alpha\cap U_\beta)
+\]
+are smooth.
+
+\begin{note}
+Smoothly compatible is also $C^\infty$-compatible.
+\end{note}
+
+\section{Maximal Atlases}
+
+A maximal atlas $\mathcal A$ contains all charts on $M$ that are smoothly compatible.
+
+\section{Smooth Manifolds}
+
+A smooth manifold is a pair $(M,\mathcal A)$ having a differential structure defined by $\mathcal A$.
+
+A scalar function $f:M\to \R$ is smooth at $p\in M$ if in a chart,
+\[
+f\circ \varphi^{-1}:\varphi(U)\to \R
+\]
+is smooth at $\varphi(p)$.
+
+\begin{intuition}
+A differential structure is the maximal collection of charts that are smoothly compatible on $M$ and that allows us to build a local pipeline
+\[
+\R^n \xrightarrow{\varphi^{-1}} U\subset M \xrightarrow{f} \R
+\]
+so that we can perform calculus independently of chart choice.
+\end{intuition}
+
+\section{Oriented Manifolds}
+
+A smooth manifold $M$ is oriented if its maximal atlas
+\[
+\mathcal A=\{(U_\alpha,\varphi_\alpha)\}
+\]
+is such that the Jacobian determinant of each transition map $\varphi_\beta\circ\varphi_\alpha^{-1}$ is positive on overlaps.
+
+\section{Submanifolds}
+
+A subset $K\subset M$ is called a submanifold of dimension $k\le m$ if, for every point $p\in K$, there exists a chart $(U,\varphi)$ with $p\in U\subset M$ such that
+\[
+\varphi(U\cap K)=\varphi(U)\cap \iota(\R^k)
+=\{(x^1,\dots,x^m)\in \varphi(U)\subset \R^m\mid x^{k+1}=x^{k+2}=\cdots=x^m=0\},
+\]
+where $\iota:\R^k\to \R^m$ is the inclusion map.
+
+\begin{note}
+A submanifold is a manifold.
+\end{note}
+
+\section{Manifolds with Boundary}
+
+An $n$-dimensional manifold $M$ with boundary is a space such that every point $p\in M$ admits a chart into either $\R^n$ or the half-space $H^n$, with
+\[
+H^n=\{(x_1,x_2,\dots,x_n)\in \R^n\mid x_n\ge 0\}.
+\]
+Transition maps between these charts are smooth.
+
+Define the boundary by
+\[
+\partial M:=\{p\in M:\varphi(p)\in\{x_n=0\}\}.
+\]
+
+Define the interior by
+\[
+M^\circ:=\{p\in M:\varphi(p)\in\{x_n>0\}\}.
+\]
+
+\begin{theorem}
+$\partial M$ is a boundary-less $(n-1)$-manifold acting as the boundary of $M$.
+\end{theorem}
+
+\begin{example}
+Let $M:=T^2\times [0,1]$, where $T^2$ is a torus $S^1\times S^1$.
+
+The local coordinates for $T^2$ are $(\theta,\phi)$ and $t$ for $[0,1]$, therefore the coordinates for $M$ are $(\theta,\phi,t)\in[0,2\pi)\times[0,2\pi)\times[0,1]$.
+
+The boundary $\partial M$ is then given by
+\[
+(T^2\times\{0\})\cup(T^2\times\{1\}).
+\]
+The interior $M^\circ$ is therefore $T^2\times(0,1)$.
+\end{example}
+
+\chapter{Tangent and Cotangent Structures}
+
+\section{Tangent Space}
+
+This is the set of all possible derivations at $p$:
+\[
+T_pM=\{v_p:C^\infty(M)\to \R\mid v_p \text{ is a derivation at } p\}.
+\]
+
+Here $v_p$ satisfies the linearity and Leibniz rules:
+\begin{itemize}
+    \item $v_p[\alpha f+\beta g]=\alpha v_p[f]+\beta v_p[g]$,
+    \item $v_p[fg]=f(p)\,v_p[g]+g(p)\,v_p[f]$.
+\end{itemize}
+
+In local coordinates $(x^1,\dots,x^n)$, every tangent vector can be written as
+\[
+v_p=v^i\frac{\partial}{\partial x^i}\Big|_p.
+\]
+
+A basis for $T_pM$ with local coordinates $(x^1,x^2,x^3,\dots,x^n)$ is
+\[
+T_pM=\Span\left\{\frac{\partial}{\partial x^1}\Big|_p,\dots,\frac{\partial}{\partial x^n}\Big|_p\right\}.
+\]
+
+\begin{note}
+These are not powers; they are indices.
+\end{note}
+
+\section{Tangent Bundle}
+
+Defined as
+\[
+TM=\bigsqcup_{p\in M} T_pM.
+\]
+
+All elements in $TM$ have the form $(p,v_p)$, where $p\in M$ and $v_p\in T_pM$.
+
+Projection: map $\pi:TM\to M$, $\pi(p,v_p)=p$.
+
+Fiber: $\pi^{-1}(p)=T_pM$.
+
+\begin{theorem}
+If $M$ has dimension $n$, then $TM$ has dimension $2n$.
+\end{theorem}
+
+\begin{definition}
+A vector field on $M$ is a smooth section of $TM$ that assigns to each point of $M$ a vector in the fiber $\pi^{-1}(p)=T_pM$.
+\end{definition}
+
+\begin{note}
+$\mathfrak X(M)$ denotes the space of all vector fields on $M$.
+\end{note}
+
+\section{Dual Spaces}
+
+The dual space $V^*$ of $V$ is the set of linear maps $V\to \R$ that measure vectors in $V$. They both have the same dimension.
+
+If $V$ has basis $\{e_1,e_2,\ldots,e_n\}$, then we can define a dual basis $\{\mu^1,\mu^2,\ldots,\mu^n\}$ of $V^*$ by imposing that
+\[
+\mu^i(e_j)=\delta_j^i.
+\]
+
+Elements in $V^*$ are covectors, and applying $\alpha\in V^*$ to $v\in V$ is the canonical pairing:
+\[
+\langle \alpha, v\rangle:=\alpha(v).
+\]
+
+\[
+\mu^i(v)=\langle\mu^i,v\rangle = \left\langle\mu^i,v^j e_j\right\rangle = v^j\langle\mu^i,e_j\rangle = v^j\delta_j^i = v^i.
+\]
+
+\[
+\delta_j^i=
+\begin{cases}
+1 & \text{if } i=j,\\
+0 & \text{if } i\neq j.
+\end{cases}
+\]
+
+\section{Cotangent Space}
+
+$T_p^*M$ is the dual space of $T_pM$, where its elements are covectors. It is spanned by
+\[
+\left\{dx^1,dx^2,\dots,dx^n\right\}.
+\]
+
+\[
+T^*M=\bigsqcup_{p\in M} T_p^*M,
+\]
+exactly as in the tangent bundle, with elements $(p,\xi)$ where $p\in M$ and $\xi\in T_p^*M$. The projection is $\pi^*$ and the fiber is $(\pi^*)^{-1}(p)$.
+
+\section{Differential 1-Forms}
+
+A differential $1$-form is a smooth section of the cotangent bundle that assigns to each point $p$ a covector $\omega_p\in T_p^*M$.
+
+Equivalently, it acts on vector fields as
+\[
+\omega:\mathfrak X(M)\to C^\infty(M).
+\]
+
+Thus it assigns a linear map that measures tangent vectors at each point, from the fiber $(\pi^*)^{-1}(p)\subset T^*M$.
+
+\begin{note}
+$\Omega^1(M)$ denotes the space of all differential $1$-forms.
+\end{note}
+
+\chapter{Tensors, Metrics, and Differential Forms}
+
+\section{Tensors}
+
+A tensor of type $(q,r)$ is a multilinear function defined as follows: for $p\in M$,
+\[
+\mathcal T_p:
+\underbrace{T_p^*M\times \cdots \times T_p^*M}_{q}
+\times
+\underbrace{T_pM\times \cdots \times T_pM}_{r}
+\longrightarrow \R.
+\]
+
+So we have
+\[
+\mathcal T_p(\alpha^1,\dots,\alpha^q,v_1,\dots,v_r)
+\equiv
+\sum_{i_1=1}^n\cdots\sum_{i_q=1}^n
+\sum_{j_1=1}^n\cdots\sum_{j_r=1}^n
+\mathcal T^{\,i_1,\dots,i_q}_{\,j_1,\dots,j_r}
+\,\alpha^1_{i_1}\cdots \alpha^q_{i_q}\,v_1^{j_1}\cdots v_r^{j_r}.
+\]
+
+The components of $\mathcal T_p$ are defined as
+\[
+\mathcal T^{\,i_1,\dots,i_q}_{\,j_1,\dots,j_r}
+=
+\mathcal T_p\left(dx^{i_1},\dots,dx^{i_q},
+\frac{\partial}{\partial x^{j_1}},\dots,\frac{\partial}{\partial x^{j_r}}\right).
+\]
+
+\section{Riemannian Manifolds}
+
+A Riemannian metric $g$ is a smooth assignment of $g_p$, an inner product (a tensor of type $(0,2)$), on $T_pM$. So we have
+\[
+g_p:T_pM\times T_pM\to \R.
+\]
+
+Note that $g_p$ is linear, symmetric, and positive definite. A pair $(M,g)$ is a Riemannian manifold.
+
+\section{Ricci Calculus}
+
+The flat operator $\flat:T_pM\to T_p^*M$ converts vectors to covectors. Note that
+\[
+\langle v^\flat,w\rangle = g_p(v,w),
+\qquad \forall w\in T_pM.
+\]
+
+The sharp operator $\sharp:T_p^*M\to T_pM$ converts covectors to vectors. Note that
+\[
+g_p(\omega^\sharp,v)=\langle\omega,v\rangle,
+\qquad \forall v\in T_pM.
+\]
+
+In a coordinate basis,
+\[
+g_p(v,w)=g_p\left(v^i\frac{\partial}{\partial x^i},w^j\frac{\partial}{\partial x^j}\right)=g_{ij}v^iw^j,
+\]
+with $g_{ij}$ the $(i,j)$-entry of the Gram matrix $G=(g_{ij})$ with inverse $G^{-1}=(g^{ij})$, such that
+\[
+g^{ik}g_{kj}=\delta_j^i.
+\]
+
+Note that
+\[
+(v^\flat)_j=g_{ij}v^i
+\qquad \text{and} \qquad
+(\omega^\sharp)^i=g^{ij}\omega_j.
+\]
+
+\section{Differential \texorpdfstring{$k$}{k}-Forms}
+
+A differential $k$-form $\omega$ on $M$ is a smooth assignment of an alternating $k$-tensor $\omega_p$ acting on $k$ vectors:
+\[
+\omega_p:T_pM\times T_pM\times \cdots \times T_pM\to \R
+\]
+such that $\omega_p(v_1,v_2,\dots,v_k)=0$ whenever $v_1,\dots,v_k$ is a linearly dependent set in $T_pM$.
+
+\begin{theorem}
+An alternating $k$-tensor $\omega_p$ is also skew-symmetric. So
+\[
+\omega_p\bigl(v_{\pi(1)},v_{\pi(2)},\dots,v_{\pi(k)}\bigr)=\operatorname{sign}(\pi)\,\omega_p(v_1,\dots,v_k).
+\]
+Recall that $\operatorname{sign}(\pi)=1$ if $\pi$ is even and $-1$ if $\pi$ is odd.
+\end{theorem}
+
+So a differential $k$-form is a smooth section of $\Lambda^k(T^*M)$, that assigns to each point $p$ an alternating $k$-tensor. Here $\Lambda^k(T^*M)$ is the alternating $k$-tensor bundle.
+
+For clarity, in coordinates:
+
+$1$-form:
+\[
+\omega = \sum_{i=1}^n \omega_i\,dx^i,
+\qquad \text{for example } \omega=F_1dx^1+F_2dx^2+F_3dx^3 \text{ in } \R^3.
+\]
+
+$2$-form:
+\[
+\eta = \sum_{i<j} \eta_{ij}\,dx^i\wedge dx^j.
+\]
+
+$k$-form:
+\[
+\alpha = \sum_{i_1<\cdots<i_k} \alpha_{i_1,\dots,i_k}\,dx^{i_1}\wedge\cdots\wedge dx^{i_k}.
+\]
+
+\begin{note}
+There are $\binom{n}{k}$ linearly independent basis alternating $k$-tensors.
+\end{note}
+
+\section{Exterior Algebra}
+
+Let $\mu\in\Omega^k(M)$ and $\nu\in\Omega^\ell(M)$. The wedge product is a $(k+\ell)$-differential form, so
+\[
+\mu\wedge\nu\in\Omega^{k+\ell}(M).
+\]
+
+In coordinates,
+\[
+\mu\wedge\nu
+=
+\mu_{i_1,\dots,i_k}\nu_{j_1,\dots,j_\ell}
+\,dx^{i_1}\wedge\cdots\wedge dx^{i_k}\wedge dx^{j_1}\wedge\cdots\wedge dx^{j_\ell}.
+\]
+
+The wedge product has properties:
+\begin{itemize}
+    \item Distributive: $(\mu+\nu)\wedge\eta = \mu\wedge\eta + \nu\wedge\eta$.
+    \item Associative: $(\mu\wedge\nu)\wedge\eta = \mu\wedge(\nu\wedge\eta)$.
+    \item Anti-commutative: $\mu\wedge\eta = (-1)^{k\ell}(\eta\wedge\mu)$, where $\mu\in\Omega^k(M)$ and $\eta\in\Omega^\ell(M)$.
+    \item Alternating: $dx^i\wedge dx^i=0$ for all $i$.
+\end{itemize}
+
+\begin{remark}
+$\mu_{i_1,\dots,i_k}$ are the components of $\mu$ such that $i_1<i_2<\cdots<i_k$.
+\end{remark}
+
+\begin{note}
+For a $0$-form $\alpha$, $\wedge$ is the same as ordinary multiplication: $\alpha\wedge\mu=\alpha\mu$.
+\end{note}
+
+\begin{example}
+In $\R^3$, let $\nu\in\Omega^2(M)$,
+\[
+\nu_p = 2dx^1\wedge dx^2 - 3dx^1\wedge dx^3 + 5dx^2\wedge dx^3
+= \sum_{i<j}\nu_{ij}\,dx^i\wedge dx^j.
+\]
+So then $\nu_{12}=2$, $\nu_{13}=-3$, and $\nu_{23}=5$.
+\end{example}
+
+\begin{theorem}
+The wedge product is an antisymmetrized tensor product.
+Formally,
+\[
+(\omega\wedge\mu)_p = \frac{(k+\ell)!}{k!\,\ell!}\,\mathcal O_a(\omega_p\otimes\mu_p),
+\]
+where $\omega\in\Omega^k(M)$ and $\mu\in\Omega^\ell(M)$.
+\end{theorem}
+
+$\mathcal O_a$ is the skew-symmetrization map, for which a $\binom{k}{0}$-tensor $\mathcal T_p$ on $T_pM$ is defined by
+\[
+\mathcal O_a(\mathcal T_p)(v_1,\dots,v_k)=\frac{1}{k!}\sum_{\pi}\sgn(\pi)\,\mathcal T_p(v_{\pi(1)},\dots,v_{\pi(k)}).
+\]
+
+\section{Exterior Derivative}
+
+The exterior derivative $d$ is an operator that raises the degree of a differential form by $1$:
+\[
+d:\Omega^k(M)\to\Omega^{k+1}(M):\omega\mapsto d\omega,
+\]
+for all $k\le n$, where $\dim(M)=n$.
+
+Properties:
+\begin{itemize}
+    \item Differential rule: if $\alpha\in\Omega^0(M)$, then $d\alpha$ is the differential, so
+    \[
+    d\alpha = \sum_i \frac{\partial\alpha}{\partial x^i}\,dx^i.
+    \]
+    \item Nilpotency: $d(d\alpha)=0$, hence $d^2=0$.
+    \item Product rule: $d(\omega\wedge\mu)=d\omega\wedge\mu + (-1)^k\omega\wedge d\mu$.
+    \item Distributivity: $d(\omega+\mu)=d\omega + d\mu$.
+\end{itemize}
+
+Also note that $d\omega$ is defined pointwise for all $p\in M$ by
+\[
+(d\omega)_p = d(\omega_p).
+\]
+
+\section{Closed and Exact Forms}
+
+A differential form $\omega$ is closed if $d\omega=0$.
+
+A differential $k$-form is exact if there exists $\mu\in\Omega^{k-1}(M)$ such that $\omega=d\mu$.
+
+Note that exact $\Rightarrow$ closed, but closed $\nRightarrow$ exact.
+
+\section{Contraction Operator}
+
+\begin{definition}
+Let $M$ be an $n$-dimensional manifold. With every vector field $v\in\mathfrak X(M)$ we can associate a linear map $i_v$, a contraction. This $i_v$ maps a differential $k$-form to a $(k-1)$-form, so
+\[
+i_v:\Omega^k(M)\to\Omega^{k-1}(M):\omega\mapsto i_v\omega,
+\]
+defined by
+\[
+(i_v\omega)(v_1,\dots,v_{k-1}) = \omega(v,v_1,\dots,v_{k-1})
+\]
+for all $v_1,v_2,\dots,v_{k-1}\in\mathfrak X(M)$.
+\end{definition}
+
+If $k=0$, then the target would be $\Omega^{-1}(M)$, so we set $i_vf=0$.
+
+Properties:
+
+Antisymmetry:
+\[
+i_v\circ i_w = - i_w\circ i_v.
+\]
+
+Product rule:
+\[
+i_v(\mu\wedge\omega)=(i_v\mu)\wedge\omega + (-1)^\ell\mu\wedge(i_v\omega),
+\]
+where $\mu\in\Omega^\ell(M)$.
+
+\section{Push-Forward}
+
+\begin{definition}
+Let $f:M\to N$ be smooth. The push-forward (differential) of $f$ at $p\in M$ is
+\[
+f_{*,p}:T_pM\to T_{f(p)}N,
+\]
+defined for $v_p\in T_pM$ and $g\in C^\infty(N)$ by
+\[
+(f_{*,p}v_p)(g)\equiv v_p(g\circ f).
+\]
+\end{definition}
+
+\section{Pullback}
+
+\begin{definition}
+Let $f:M\to N$ be smooth. The pullback map is the linear map
+\[
+f^*:\Omega^k(N)\to\Omega^k(M):\omega\mapsto f^*\omega,
+\]
+defined for $\omega\in\Omega^k(N)$ and $v_1,\dots,v_k\in T_pM$ by
+\[
+(f^*\omega)_p(v_1,\dots,v_k)\equiv \omega_{f(p)}(f_{*,p}v_1,\dots,f_{*,p}v_k).
+\]
+\end{definition}
+
+Pullback map properties:
+\begin{itemize}
+    \item Compatible with the wedge product: $f^*(\mu\wedge\omega)=f^*\mu\wedge f^*\omega$.
+    \item Compatible with the exterior derivative: $f^*(d\omega)=d(f^*\omega)$.
+\end{itemize}
+
+\chapter{Integration of Differential Forms}
+
+\section{Integration in \texorpdfstring{$\R^3$}{R3}}
+
+\begin{definition}
+Let $\omega\in\Omega^1(D)$, let $C\subset D$ be smooth and orientable with parametrization $x(t)=\bigl(x(t),y(t),z(t)\bigr)$, $t\in[a,b]$. Then the integral of $\omega$ along $C$ is
+\[
+\int_C \omega \equiv \int_a^b \omega_{x(t)}(\dot x(t))\,dt.
+\]
+\end{definition}
+
+It follows that by definition of $\omega$,
+\[
+\int_a^b \omega_{x(t)}(\dot x(t))\,dt
+=\int_a^b \sum_{i=1}^3 F_i(x(t))\,dx^i(\dot x(t))\,dt
+=\int_a^b \sum_{i=1}^3 F_i(x(t))\dot x^i(t)\,dt
+\]
+\[
+=\int_a^b \ip{F(x(t))}{\dot x(t)}\,dt
+=\int_C \ip{F}{\ut}\,ds.
+\]
+
+\begin{definition}
+Let $\omega\in\Omega^2(D)$ and let $S\subset D$ be a smooth orientable surface with parametrization $x=x(u,v)$, $(u,v)\in G\subset \R^2$. Then the integral over $S$ is defined by
+\[
+\int_S \omega \equiv \iint_G \omega_{x(u,v)}\!\left(\frac{\partial x}{\partial u},\frac{\partial x}{\partial v}\right)\,du\,dv.
+\]
+\end{definition}
+
+It follows that
+\[
+\iint_G \omega_{x(u,v)}\!\left(\frac{\partial x}{\partial u},\frac{\partial x}{\partial v}\right)\,du\,dv
+=\iint_G F_1(x(u,v))\,dy\wedge dz\!\left(\frac{\partial x}{\partial u},\frac{\partial x}{\partial v}\right)\,du\,dv
+\]
+\[
+\qquad + \iint_G F_2(x(u,v))\,dz\wedge dx\!\left(\frac{\partial x}{\partial u},\frac{\partial x}{\partial v}\right)\,du\,dv
+\]
+\[
+\qquad + \iint_G F_3(x(u,v))\,dx\wedge dy\!\left(\frac{\partial x}{\partial u},\frac{\partial x}{\partial v}\right)\,du\,dv
+\]
+\[
+= \iint_G \left(F(x(u,v)),\frac{\partial x}{\partial u}\times \frac{\partial x}{\partial v}\right)\,du\,dv
+= \iint_S \ip{F}{n}\,d\sigma.
+\]
+
+\subsection{1-form \texorpdfstring{$\to$}{->} curl (line \texorpdfstring{$\to$}{->} surface)}
+
+\[
+\omega = F_1\,dx + F_2\,dy + F_3\,dz.
+\]
+
+\[
+d\omega =
+(\partial_y F_3 - \partial_z F_2)\,dy\wedge dz
++
+(\partial_z F_1 - \partial_x F_3)\,dz\wedge dx
++
+(\partial_x F_2 - \partial_y F_1)\,dx\wedge dy.
+\]
+
+\textbf{Identification:}
+\[
+d\omega \equiv (\curl F)_1\,dy\wedge dz + (\curl F)_2\,dz\wedge dx + (\curl F)_3\,dx\wedge dy.
+\]
+
+\textbf{Integral form:}
+\[
+\int_C \omega
+=
+\int_C F_i\,dx^i
+=
+\int_C \ip{F}{\ut}\,ds,
+\qquad
+\int_S d\omega
+=
+\iint_S \ip{\curl F}{n}\,d\sigma.
+\]
+
+\subsection{2-form \texorpdfstring{$\to$}{->} divergence (surface \texorpdfstring{$\to$}{->} volume)}
+
+\[
+\omega = F_1\,dy\wedge dz + F_2\,dz\wedge dx + F_3\,dx\wedge dy
+\]
+implies
+\[
+d\omega =
+(\partial_x F_1 + \partial_y F_2 + \partial_z F_3)\,dx\wedge dy\wedge dz.
+\]
+
+\textbf{Identification:}
+\[
+d\omega \equiv (\divergence F)\,dx\wedge dy\wedge dz.
+\]
+
+\textbf{Integral form:}
+\[
+\int_S \omega
+=
+\iint_S \ip{F}{n}\,d\sigma,
+\quad 
+\int_D d\omega
+=
+\iiint_D \divergence F\,dV.
+\]
+
+\subsection{3-form (volume)}
+
+\[
+\omega = f\,dx\wedge dy\wedge dz
+\qquad \Rightarrow \qquad
+\int_D \omega = \iiint_D f\,dV.
+\]
+
+\section{Integration in \texorpdfstring{$\R^n$}{Rn}}
+
+\subsection{Parametrized \texorpdfstring{$k$}{k}-Subsets}
+
+A set $M\subset D\subset \R^n$ is a parametrized $k$-subset if there exists
+\[
+x:G\subset \R^k\to \R^n
+\]
+such that $x$ is injective and $M=x(G)$.
+
+It is smooth if $x\in C^\infty$ and if the vectors
+\[
+\frac{\partial x}{\partial u_1},\frac{\partial x}{\partial u_2},\dots,\frac{\partial x}{\partial u_k}
+\]
+are linearly independent.
+
+\subsection{Orientability}
+
+Let $M$ be a smooth parametrized $k$-subset with parametrization
+\[
+x:G\subset \R^k\to \R^n.
+\]
+$M$ is orientable if there exists a non-zero differential $k$-form $\beta$ on $M$ such that the parametrization is compatible:
+\[
+\beta_x(T_{u_1},T_{u_2},\cdots,T_{u_k})>0
+\qquad \forall (u_1,u_2,\cdots,u_k)\in G.
+\]
+
+\section{Integration on Manifolds}
+
+\subsection{Integration of Top-Forms in a Single Chart}
+
+Let $M$ be an oriented $n$-dimensional smooth manifold, and let $\omega \in \Omega^n(M)$ have compact support contained in a chart $(U,\varphi)\subset M$.
+
+We define the integral of $\omega$ over $M$ by pulling it back to $\R^n$:
+\[
+\int_M \omega := \int_{\varphi(U)} (\varphi^{-1})^*\omega.
+\]
+
+In coordinates, this becomes
+\[
+(\varphi^{-1})^*\omega = f(x)\,dx^1 \wedge \cdots \wedge dx^n,
+\]
+so that
+\[
+\int_M \omega = \int_{\varphi(U)} f(x)\,dx^1 \cdots dx^n.
+\]
+
+\begin{note}
+The integral is well-defined since $\varphi$ is a diffeomorphism and $\supp(\omega)\subset U$.
+\end{note}
+
+\subsection{Independence of the Chart}
+
+Let $(U,\varphi)$ and $(V,\psi)$ be two charts such that $\supp(\omega)\subset U\cap V$.
+
+Writing
+\[
+h = \psi \circ \varphi^{-1},
+\]
+we obtain, by change of variables,
+\[
+\int_{\psi(V)} g(y)\,dy^1 \cdots dy^n
+=
+\int_{\varphi(U)} g(h(x)) \det Dh(x)\,dx^1 \cdots dx^n.
+\]
+
+Thus the value of the integral does not depend on the chosen chart.
+
+\subsection{Partition of Unity}
+
+Let $M$ be a smooth manifold. A collection of smooth functions $\{\chi_\alpha\}_{\alpha\in A}\subset C^\infty(M)$ is called a partition of unity if:
+\begin{itemize}
+    \item $0 \le \chi_\alpha \le 1$,
+    \item $\sum_{\alpha\in A} \chi_\alpha(p) = 1$ for all $p\in M$,
+    \item the collection is locally finite.
+\end{itemize}
+
+The partition is subordinate to an open cover $\{U_\alpha\}$ if
+\[
+\supp(\chi_\alpha)\subset U_\alpha.
+\]
+
+\begin{theorem}
+Every open cover of a smooth manifold admits a subordinate smooth partition of unity.
+\end{theorem}
+
+\subsection{Bump Functions}
+
+A bump function is a smooth function with compact support that is identically equal to $1$ on a smaller region.
+
+Such functions are used to construct partitions of unity.
+
+\subsection{Integration Using Multiple Charts}
+
+Let $\omega \in \Omega^n(M)$ with
+\[
+\supp(\omega)\subset \bigcup_{i=1}^s U_i,
+\]
+where each $U_i$ is a chart domain.
+
+Let $\{\chi_i\}_{i=0}^s$ be a partition of unity subordinate to the open cover
+\[
+\{U_0, U_1, \dots, U_s\}, \qquad U_0 := M \setminus \supp(\omega).
+\]
+
+Then
+\[
+\int_M \omega
+=
+\int_M \left(\sum_{i=0}^s \chi_i\right)\omega
+=
+\sum_{i=0}^s \int_M \chi_i \omega.
+\]
+
+Since $\chi_0 \omega = 0$, this reduces to
+\[
+\int_M \omega = \sum_{i=1}^s \int_M \chi_i \omega.
+\]
+
+Each term satisfies
+\[
+\int_M \chi_i \omega
+=
+\int_{\varphi_i(U_i)} (\varphi_i^{-1})^*(\chi_i \omega),
+\]
+so the integral is computed locally in each chart.
+
+\begin{note}
+The result is independent of both the chosen charts and the partition of unity.
+\end{note}
+
+\section{Regions with Boundary via Regular Values}
+
+Let $M$ be a smooth manifold and $f \in C^\infty(M)$ such that $0$ is a regular value.
+
+Define the region
+\[
+D := \{p \in M \mid f(p) \ge 0\},
+\]
+its boundary
+\[
+\partial D := \{p \in M \mid f(p) = 0\},
+\]
+and its interior
+\[
+D^\circ := \{p \in M \mid f(p) > 0\}.
+\]
+
+\begin{note}
+The boundary is given by a level set of $f$.
+\end{note}
+
+\section{Generalized Stokes' Theorem}
+
+Let $M$ be an oriented $n$-dimensional manifold and $D \subset M$ a region with boundary $\partial D$. Let $\omega \in \Omega^{n-1}(M)$ be such that $\supp(\omega)\cap D$ is compact.
+
+Then
+\[
+\int_D d\omega = \int_{\partial D} \omega.
+\]
+
+The boundary integral is interpreted as
+\[
+\int_{\partial D} \omega = \int_{\partial D} \iota^*\omega,
+\]
+where $\iota:\partial D \hookrightarrow M$ is the inclusion map.
+
+\begin{intuition}
+The exterior derivative $d\omega$ measures the infinitesimal behaviour of $\omega$ inside $D$, while the integral over $\partial D$ captures its global effect on the boundary.
+\end{intuition}
+
+
+
+
+\end{document}
